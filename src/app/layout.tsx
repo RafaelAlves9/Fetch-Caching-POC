@@ -43,9 +43,9 @@ export default function RootLayout({
             <main className="p-8 ">
                <h1 className="text-3xl font-bold mb-6">🎬 Filmes Ghibli</h1>
                <div className="flex gap-4">
-                  <Link href="/filmes/no-store">No Store</Link>
-                  <Link href="/filmes/force-cache">Force Cache</Link>
-                  <Link href="/filmes/revalidate">Revalidate</Link>
+                  <Link href="/films/no-store">No Store</Link>
+                  <Link href="/films/force-cache">Force Cache</Link>
+                  <Link href="/films/revalidate">Revalidate</Link>
                </div>
                {children}
             </main>

@@ -3,6 +3,8 @@ import { fetchWithTimer } from '../../../handlers/fetchWithTimer'
 import SuspenseLoading from '@src/components/suspenseLoading'
 import { TFilm } from '@src/types/TFilm'
 
+export const dynamic = 'force-dynamic';
+
 export default async function ForceCachePage() {
    const { data, duration } = await fetchWithTimer<TFilm[]>(
       'https://ghibliapi.vercel.app/films/',
