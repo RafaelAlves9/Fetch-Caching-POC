@@ -46,6 +46,7 @@ export default function RootLayout({
                   <Link href="/films/no-store">No Store</Link>
                   <Link href="/films/force-cache">Force Cache</Link>
                   <Link href="/films/revalidate">Revalidate</Link>
+                  <Link href="/films/force-static">Force Static</Link>
                </div>
                {children}
             </main>
