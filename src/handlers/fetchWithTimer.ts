@@ -1,14 +1,30 @@
-// lib/fetchWithTimer.ts
-export async function fetchWithTimer<T = unknown>(
-   endpoint: string,
-   cacheOption: RequestInit
-): Promise<{ data: T; duration: number }> {
-   const start = Date.now()
+import axios, { AxiosResponse } from 'axios';
 
-   const res = await fetch(endpoint, cacheOption)
+interface FetchWithTimerProps {
+   endpoint: string,
+   cacheOption: RequestInit,
+   httpLib: 'fetch' | 'axios'
+}
+
+export async function fetchWithTimer<T = unknown>(props: FetchWithTimerProps): Promise<{ data: T; duration: number }> {
+   const { endpoint, cacheOption, httpLib } = props
+   const start = Date.now()
+   let res: AxiosResponse<T> | Response
+
+   if (httpLib === 'fetch') {
+      res = await fetch(endpoint, cacheOption)
+   } else {
+      res = await axios.get(endpoint);
+   }
 
    const end = Date.now()
-   const data = (await res.json()) as T
+   let data: T;
+
+   if (httpLib === 'fetch') {
+      data = await res.json()
+   } else {
+      data = res.data
+   }
 
    return { data, duration: end - start }
 }

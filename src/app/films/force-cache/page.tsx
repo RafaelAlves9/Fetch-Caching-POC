@@ -2,34 +2,24 @@ import { Suspense } from 'react'
 import { fetchWithTimer } from '../../../handlers/fetchWithTimer'
 import SuspenseLoading from '@src/components/suspenseLoading'
 import { TFilm } from '@src/types/TFilm'
-
+import FilmList from '@src/components/filmList';
+import { colorByDuration } from '@src/app/utils/colorByDuration';
 export const dynamic = 'force-dynamic';
 
 export default async function ForceCachePage() {
-   const { data, duration } = await fetchWithTimer<TFilm[]>(
-      'https://ghibliapi.vercel.app/films/',
-      { cache: 'force-cache', next: { tags: ['films'] } }
-   )
+   const { data, duration } = await fetchWithTimer<TFilm[]>({
+      endpoint: 'https://ghibliapi.vercel.app/films/',
+      cacheOption: { cache: 'force-cache', next: { tags: ['films'] } },
+      httpLib: 'fetch'
+   })
 
    return (
       <Suspense fallback={<SuspenseLoading />}>
          <div className='pt-6'>
             <h1 className="text-xl font-bold mb-1">Cache: <span className='underline'>force-cache</span></h1>
-            <p className="text-sm text-gray-500">Tempo de resposta: <span className={`text-xl font-bold ${duration <= 50 ? 'text-green-500' :
-               duration <= 100 ? 'text-yellow-500' :
-                  duration <= 200 ? 'text-orange-500' :
-                     'text-red-500'
-               }`}>{duration}ms</span></p>
+            <p className="text-sm text-gray-500">Tempo de resposta: <span className={`text-xl font-bold ${colorByDuration(duration)}`}>{duration}ms</span></p>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-               {data.map((film) => (
-                  <div key={film.id} className="rounded-xl shadow-md p-2 border">
-                     <img src={film.image} alt={film.title} className="rounded-md mb-2" />
-                     <h2 className="font-semibold">{film.title}</h2>
-                     <p className="text-xs text-gray-600">{film.description}</p>
-                  </div>
-               ))}
-            </div>
+            <FilmList films={data} />
          </div>
       </Suspense>
    )
